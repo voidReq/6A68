@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { buildNoteTree } from '@/lib/notes';
 import { getAllProjects, type Project } from '@/lib/projects';
-import { SITE, NUAUTO_URL } from '@/lib/site';
+import { SITE, NUAUTO_URL, VIMOCS_URL } from '@/lib/site';
 import AboutClient, { type AboutItem } from './AboutClient';
 
 // 6A68.dev only; next.config.js 404s /about on goonsite.
@@ -33,6 +33,12 @@ export default function AboutPage() {
           name: 'NUauto',
           href: NUAUTO_URL,
           desc: 'Finds NUworks co-op postings that fit your resume and submits the ones you approve.',
+          external: true,
+        },
+        {
+          name: 'Vimocs',
+          href: VIMOCS_URL,
+          desc: 'Vim keybindings for Google Docs in Firefox.',
           external: true,
         },
         ...builds,

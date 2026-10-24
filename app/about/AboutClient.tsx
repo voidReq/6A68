@@ -309,10 +309,11 @@ export default function AboutClient({
                   </span>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-xs md:text-sm" style={{ color: 'var(--site-text)' }}>
-                  <li>Architect frontend and backend of a high-throughput trading platform with Next.js/React, FastAPI, Supabase (PostgreSQL), and Redis</li>
-                  <li>Deploy multi-service stack on Oracle Cloud (Ubuntu) with automated CI lint, test, and containerized integration gates</li>
-                  <li>Design and implement shared schemas, docs, and internal contracts connecting the frontend, backend microservices, and execution engine</li>
-                  <li>Manage security configurations: PostgreSQL Row-Level Security (RLS) policies, input sanitization, and defensive pentesting</li>
+                  <li>Co-founding a cloud-based algorithmic trading platform enabling traders to visually design, backtest, and automate execution for multi-stage strategies across equities and futures</li>
+                  <li>Architect the full-stack web application with Next.js/React, FastAPI microservices, and Supabase (PostgreSQL with RLS), interfacing with a compiled Rust backtesting and live-feed engine</li>
+                  <li>Integrate real-time broker execution rails (SnapTrade for equities, Rithmic for futures) with execution safety infrastructure (resting bracket orders, risk ledgers, and kill-switches)</li>
+                  <li>Deploy and orchestrate multi-service stack on Oracle Cloud (Ubuntu) with automated CI test suites, shared schema codegen, and containerized deployment gates</li>
+                  <li>Manage platform security: PostgreSQL Row-Level Security (RLS) policies, encrypted broker credential vaulting, and defensive pentesting</li>
                 </ul>
               </div>
 
@@ -451,7 +452,7 @@ export default function AboutClient({
                   <span className="font-mono text-sm font-semibold" style={{ color: 'var(--site-text)' }}>
                     NUauto (
                     <a
-                      href="https://github.com/voidReq/NUauto/blob/main/README.md"
+                      href="https://github.com/voidReq/NUauto"
                       {...externalProps}
                       className="hover:underline"
                       style={{ color: 'var(--site-text-dim)' }}
@@ -461,11 +462,37 @@ export default function AboutClient({
                     )
                   </span>
                   <span className="font-mono text-xs shrink-0" style={{ color: 'var(--site-text-dim)' }}>
-                    Python, Web Automation | 2026
+                    Python, Playwright, LLM APIs | 2026
                   </span>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-xs md:text-sm" style={{ color: 'var(--site-text)' }}>
-                  <li>Finds NUworks co-op postings that fit your resume and automates submission for student-approved positions</li>
+                  <li>Automates Northeastern co-op job discovery and applications by matching postings to resumes via Claude and managing approvals in Google Sheets</li>
+                  <li>Executes end-to-end browser submissions in Firefox via Playwright with human-in-the-loop review, plus an autonomous browser agent for external job portals</li>
+                </ul>
+              </div>
+
+              {/* Vimocs */}
+              <div>
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                  <span className="font-mono text-sm font-semibold" style={{ color: 'var(--site-text)' }}>
+                    Vimocs (
+                    <a
+                      href="https://github.com/voidReq/vimocs"
+                      {...externalProps}
+                      className="hover:underline"
+                      style={{ color: 'var(--site-text-dim)' }}
+                    >
+                      github.com/voidReq/vimocs ↗
+                    </a>
+                    )
+                  </span>
+                  <span className="font-mono text-xs shrink-0" style={{ color: 'var(--site-text-dim)' }}>
+                    JavaScript, WebExtensions | Oct 2026
+                  </span>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-xs md:text-sm" style={{ color: 'var(--site-text)' }}>
+                  <li>Built a Firefox browser extension bringing full Vim modal editing (normal, insert, visual/linewise modes, text objects, operators, macros) to Google Docs</li>
+                  <li>Hooked into Docs&apos; undocumented canvas-to-SVG rendering flag to track caret coordinates and drive editing via synthetic key events and clipboard pipelines</li>
                 </ul>
               </div>
 
