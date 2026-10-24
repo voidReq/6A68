@@ -821,7 +821,7 @@ export default function AboutClient({
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-xs md:text-sm" style={{ color: 'var(--site-text)' }}>
                   <li>Proof-of-concept remote access tool in pure C utilizing the Discord Bot API as an encrypted covert C2 channel</li>
-                  <li>Disguised behind a native Win32 Rock-Paper-Scissors decoy game running in a parallel GUI thread to evade victim suspicion</li>
+                  <li>Disguised behind a native Win32 Rock-Paper-Scissors decoy game running in a parallel GUI thread to evade suspicion</li>
                 </ul>
                 <ProjectPreviewDrawer
                   isOpen={!!previews.discord}
