@@ -10,6 +10,7 @@ import {
   IconWorld,
   IconExternalLink,
   IconChevronDown,
+  IconPhoto,
 } from '@tabler/icons-react';
 
 export interface AboutItem {
@@ -87,6 +88,73 @@ function FoldableSection({
   );
 }
 
+function ProjectPreviewDrawer({
+  isOpen,
+  imageSrc,
+  alt,
+  caption,
+}: {
+  isOpen: boolean;
+  imageSrc: string;
+  alt: string;
+  caption?: string;
+}) {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.2 }}
+          className="mt-3 overflow-hidden"
+        >
+          <div
+            className="rounded-xl overflow-hidden border p-2 bg-black/[0.03] dark:bg-white/[0.02]"
+            style={{ borderColor: 'var(--site-border)' }}
+          >
+            <div
+              className="flex items-center justify-between px-2 py-1 text-[11px] font-mono border-b mb-2"
+              style={{ borderColor: 'var(--site-border)', color: 'var(--site-text-dim)' }}
+            >
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--site-cyan)' }} />
+                <span>{alt}</span>
+              </span>
+              <a
+                href={imageSrc}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline flex items-center gap-1"
+                style={{ color: 'var(--site-cyan)' }}
+              >
+                <span>view full image</span>
+                <IconExternalLink size={10} />
+              </a>
+            </div>
+            <div
+              className="rounded-lg overflow-hidden flex items-center justify-center bg-black/40 max-h-72 border"
+              style={{ borderColor: 'var(--site-border)' }}
+            >
+              <img
+                src={imageSrc}
+                alt={alt}
+                className="w-full h-auto max-h-72 object-contain"
+                loading="lazy"
+              />
+            </div>
+            {caption && (
+              <p className="text-xs font-mono mt-2 px-1 leading-relaxed" style={{ color: 'var(--site-text-dim)' }}>
+                {caption}
+              </p>
+            )}
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 export default function AboutClient({
   topics = [],
 }: {
@@ -103,6 +171,32 @@ export default function AboutClient({
     notes: true,
     interests: true,
   });
+
+  const projectPreviewKeys = ['nuauto', 'vimocs', 'website', 'revolutions', 'discord'];
+  const [previews, setPreviews] = useState<Record<string, boolean>>({
+    nuauto: true,
+    vimocs: true,
+    website: true,
+    revolutions: true,
+    discord: true,
+  });
+
+  const togglePreview = (key: string) => {
+    setPreviews((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const allProjectPreviewsOpen = projectPreviewKeys.every((k) => previews[k]);
+  const toggleAllPreviews = (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    const nextState = !allProjectPreviewsOpen;
+    setPreviews((prev) => {
+      const updated = { ...prev };
+      for (const key of projectPreviewKeys) {
+        updated[key] = nextState;
+      }
+      return updated;
+    });
+  };
 
   const allOpen = sectionKeys.every((k) => openSections[k]);
 
@@ -402,7 +496,27 @@ export default function AboutClient({
                     >
                       GitHub ↗
                     </a>
-                    )
+                    ){' '}
+                    <button
+                      type="button"
+                      onClick={() => togglePreview('smartgrid')}
+                      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-mono transition-colors border cursor-pointer align-baseline ml-1"
+                      style={{
+                        borderColor: previews.smartgrid ? 'var(--site-cyan)' : 'var(--site-border)',
+                        color: previews.smartgrid ? 'var(--site-cyan)' : 'var(--site-text-dim)',
+                        backgroundColor: previews.smartgrid ? 'rgba(125, 207, 255, 0.08)' : 'transparent',
+                      }}
+                      title="Toggle testbed schematic"
+                    >
+                      <IconPhoto size={11} />
+                      <span>{previews.smartgrid ? 'hide schematic' : 'schematic'}</span>
+                    </button>
+                    <ProjectPreviewDrawer
+                      isOpen={!!previews.smartgrid}
+                      imageSrc="/images/smartgrid-diagram.png"
+                      alt="SmartGrid IoT Simulation Testbed"
+                      caption="Small-scale power grid testbed architecture with generators, INA219 power monitors, and MQTT messaging server control."
+                    />
                   </li>
                   <li>Built familiarity with Arduino/C++, Python, MQTT, INA219 power monitors, and various development boards (primarily ESP family)</li>
                 </ul>
@@ -418,7 +532,109 @@ export default function AboutClient({
             onToggle={() => toggleSection('projects')}
           >
             <div className="space-y-5">
-              {/* Personal Website */}
+              {/* Previews Master Toggle */}
+              <div className="flex justify-end text-xs font-mono pb-2 border-b" style={{ borderColor: 'var(--site-border)' }}>
+                <button
+                  type="button"
+                  onClick={toggleAllPreviews}
+                  className="hover:underline cursor-pointer"
+                  style={{ color: 'var(--site-cyan)' }}
+                >
+                  {allProjectPreviewsOpen ? '[ hide all previews ]' : '[ show all previews ]'}
+                </button>
+              </div>
+
+              {/* NUauto (Oct 2026) */}
+              <div>
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                  <span className="font-mono text-sm font-semibold" style={{ color: 'var(--site-text)' }}>
+                    NUauto (
+                    <a
+                      href="https://github.com/voidReq/NUauto"
+                      {...externalProps}
+                      className="hover:underline"
+                      style={{ color: 'var(--site-text-dim)' }}
+                    >
+                      github.com/voidReq/NUauto ↗
+                    </a>
+                    ){' '}
+                    <button
+                      type="button"
+                      onClick={() => togglePreview('nuauto')}
+                      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-mono transition-colors border cursor-pointer align-baseline ml-1"
+                      style={{
+                        borderColor: previews.nuauto ? 'var(--site-cyan)' : 'var(--site-border)',
+                        color: previews.nuauto ? 'var(--site-cyan)' : 'var(--site-text-dim)',
+                        backgroundColor: previews.nuauto ? 'rgba(125, 207, 255, 0.08)' : 'transparent',
+                      }}
+                      title="Toggle screenshot preview"
+                    >
+                      <IconPhoto size={11} />
+                      <span>{previews.nuauto ? 'hide preview' : 'preview'}</span>
+                    </button>
+                  </span>
+                  <span className="font-mono text-xs shrink-0" style={{ color: 'var(--site-text-dim)' }}>
+                    Python, Playwright, LLM APIs | Oct 2026
+                  </span>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-xs md:text-sm" style={{ color: 'var(--site-text)' }}>
+                  <li>Automates Northeastern co-op job discovery and applications by matching postings to resumes via Claude and managing approvals in Google Sheets</li>
+                  <li>Executes end-to-end browser submissions in Firefox via Playwright with human-in-the-loop review, plus an autonomous browser agent for external job portals</li>
+                </ul>
+                <ProjectPreviewDrawer
+                  isOpen={!!previews.nuauto}
+                  imageSrc="/images/nuauto-preview.png"
+                  alt="NUauto Dashboard"
+                  caption="NUauto local GUI — automated co-op review workflow, ranking algorithms, and application logs."
+                />
+              </div>
+
+              {/* Vimocs (Oct 2026) */}
+              <div>
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                  <span className="font-mono text-sm font-semibold" style={{ color: 'var(--site-text)' }}>
+                    Vimocs (
+                    <a
+                      href="https://github.com/voidReq/vimocs"
+                      {...externalProps}
+                      className="hover:underline"
+                      style={{ color: 'var(--site-text-dim)' }}
+                    >
+                      github.com/voidReq/vimocs ↗
+                    </a>
+                    ){' '}
+                    <button
+                      type="button"
+                      onClick={() => togglePreview('vimocs')}
+                      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-mono transition-colors border cursor-pointer align-baseline ml-1"
+                      style={{
+                        borderColor: previews.vimocs ? 'var(--site-cyan)' : 'var(--site-border)',
+                        color: previews.vimocs ? 'var(--site-cyan)' : 'var(--site-text-dim)',
+                        backgroundColor: previews.vimocs ? 'rgba(125, 207, 255, 0.08)' : 'transparent',
+                      }}
+                      title="Toggle extension preview"
+                    >
+                      <IconPhoto size={11} />
+                      <span>{previews.vimocs ? 'hide preview' : 'preview'}</span>
+                    </button>
+                  </span>
+                  <span className="font-mono text-xs shrink-0" style={{ color: 'var(--site-text-dim)' }}>
+                    JavaScript, WebExtensions | Oct 2026
+                  </span>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-xs md:text-sm" style={{ color: 'var(--site-text)' }}>
+                  <li>Built a Firefox browser extension bringing full Vim modal editing (normal, insert, visual/linewise modes, text objects, operators, macros) to Google Docs</li>
+                  <li>Hooked into Docs&apos; undocumented canvas-to-SVG rendering flag to track caret coordinates and drive editing via synthetic key events and clipboard pipelines</li>
+                </ul>
+                <ProjectPreviewDrawer
+                  isOpen={!!previews.vimocs}
+                  imageSrc="/images/vimocs-preview.png"
+                  alt="Vimocs Modal Editing in Google Docs"
+                  caption="Vimocs browser extension running directly in Google Docs — normal/insert modal editing, cursor synchronization, and command-line overlay."
+                />
+              </div>
+
+              {/* Personal Website (Jan 2025 – Present) */}
               <div>
                 <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
                   <span className="font-mono text-sm font-semibold" style={{ color: 'var(--site-text)' }}>
@@ -434,7 +650,21 @@ export default function AboutClient({
                     >
                       github.com/voidReq/6A68 ↗
                     </a>
-                    )
+                    ){' '}
+                    <button
+                      type="button"
+                      onClick={() => togglePreview('website')}
+                      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-mono transition-colors border cursor-pointer align-baseline ml-1"
+                      style={{
+                        borderColor: previews.website ? 'var(--site-cyan)' : 'var(--site-border)',
+                        color: previews.website ? 'var(--site-cyan)' : 'var(--site-text-dim)',
+                        backgroundColor: previews.website ? 'rgba(125, 207, 255, 0.08)' : 'transparent',
+                      }}
+                      title="Toggle site preview"
+                    >
+                      <IconPhoto size={11} />
+                      <span>{previews.website ? 'hide preview' : 'preview'}</span>
+                    </button>
                   </span>
                   <span className="font-mono text-xs shrink-0" style={{ color: 'var(--site-text-dim)' }}>
                     Next.js/React, APIs, Git | Jan 2025 – Present
@@ -444,90 +674,30 @@ export default function AboutClient({
                   <li>Developed personal website with extensive personal notes, security writeups, and projects</li>
                   <li>Self-hosted with proprietary visitor tracking, sitemap terminal emulator, clean/goonsite dual mode, and Obsidian markdown sync</li>
                 </ul>
+                <ProjectPreviewDrawer
+                  isOpen={!!previews.website}
+                  imageSrc="/images/6a68-preview.png"
+                  alt="6A68.dev Personal Website & Terminal"
+                  caption="6A68.dev — dual-mode terminal portfolio with live visitor telemetry, interactive 3D node sphere, and dark theme."
+                />
               </div>
 
-              {/* NUauto */}
+              {/* Homelab (Jan 2025 – Present) */}
               <div>
                 <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
                   <span className="font-mono text-sm font-semibold" style={{ color: 'var(--site-text)' }}>
-                    NUauto (
-                    <a
-                      href="https://github.com/voidReq/NUauto"
-                      {...externalProps}
-                      className="hover:underline"
-                      style={{ color: 'var(--site-text-dim)' }}
-                    >
-                      github.com/voidReq/NUauto ↗
-                    </a>
-                    )
+                    Homelab
                   </span>
                   <span className="font-mono text-xs shrink-0" style={{ color: 'var(--site-text-dim)' }}>
-                    Python, Playwright, LLM APIs | 2026
+                    Linux (Pi OS, Ubuntu), Networking | Jan 2025 – Present
                   </span>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-xs md:text-sm" style={{ color: 'var(--site-text)' }}>
-                  <li>Automates Northeastern co-op job discovery and applications by matching postings to resumes via Claude and managing approvals in Google Sheets</li>
-                  <li>Executes end-to-end browser submissions in Firefox via Playwright with human-in-the-loop review, plus an autonomous browser agent for external job portals</li>
+                  <li>Assembled a Pi 5 and an old PC into a homelab, formed an encrypted Tailnet, and deployed various automation projects</li>
                 </ul>
               </div>
 
-              {/* Vimocs */}
-              <div>
-                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
-                  <span className="font-mono text-sm font-semibold" style={{ color: 'var(--site-text)' }}>
-                    Vimocs (
-                    <a
-                      href="https://github.com/voidReq/vimocs"
-                      {...externalProps}
-                      className="hover:underline"
-                      style={{ color: 'var(--site-text-dim)' }}
-                    >
-                      github.com/voidReq/vimocs ↗
-                    </a>
-                    )
-                  </span>
-                  <span className="font-mono text-xs shrink-0" style={{ color: 'var(--site-text-dim)' }}>
-                    JavaScript, WebExtensions | Oct 2026
-                  </span>
-                </div>
-                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-xs md:text-sm" style={{ color: 'var(--site-text)' }}>
-                  <li>Built a Firefox browser extension bringing full Vim modal editing (normal, insert, visual/linewise modes, text objects, operators, macros) to Google Docs</li>
-                  <li>Hooked into Docs&apos; undocumented canvas-to-SVG rendering flag to track caret coordinates and drive editing via synthetic key events and clipboard pipelines</li>
-                </ul>
-              </div>
-
-              {/* Discord Remote Access */}
-              <div>
-                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
-                  <span className="font-mono text-sm font-semibold" style={{ color: 'var(--site-text)' }}>
-                    <Link
-                      href="/projects/projects/security/discord-remote-access"
-                      className="hover:underline"
-                      style={{ color: 'var(--site-text)' }}
-                    >
-                      Discord Remote Access
-                    </Link>{' '}
-                    (
-                    <a
-                      href="https://github.com/voidReq/discordRemoteAccess"
-                      {...externalProps}
-                      className="hover:underline"
-                      style={{ color: 'var(--site-text-dim)' }}
-                    >
-                      github.com/voidReq/discordRemoteAccess ↗
-                    </a>
-                    )
-                  </span>
-                  <span className="font-mono text-xs shrink-0" style={{ color: 'var(--site-text-dim)' }}>
-                    C, Windows API | 2025
-                  </span>
-                </div>
-                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-xs md:text-sm" style={{ color: 'var(--site-text)' }}>
-                  <li>Proof-of-concept remote access tool in pure C utilizing the Discord Bot API as an encrypted covert C2 channel</li>
-                </ul>
-              </div>
-
-              {/* T-Watch Evil Portal */}
+              {/* T-Watch Evil Portal (Aug 2025) */}
               <div>
                 <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
                   <span className="font-mono text-sm font-semibold" style={{ color: 'var(--site-text)' }}>
@@ -558,7 +728,7 @@ export default function AboutClient({
                 </ul>
               </div>
 
-              {/* Revolutions */}
+              {/* Revolutions (Mar 2025) */}
               <div>
                 <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
                   <span className="font-mono text-sm font-semibold" style={{ color: 'var(--site-text)' }}>
@@ -578,7 +748,21 @@ export default function AboutClient({
                     >
                       github.com/voidReq/revolutions ↗
                     </a>
-                    )
+                    ){' '}
+                    <button
+                      type="button"
+                      onClick={() => togglePreview('revolutions')}
+                      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-mono transition-colors border cursor-pointer align-baseline ml-1"
+                      style={{
+                        borderColor: previews.revolutions ? 'var(--site-cyan)' : 'var(--site-border)',
+                        color: previews.revolutions ? 'var(--site-cyan)' : 'var(--site-text-dim)',
+                        backgroundColor: previews.revolutions ? 'rgba(125, 207, 255, 0.08)' : 'transparent',
+                      }}
+                      title="Toggle 3D plot preview"
+                    >
+                      <IconPhoto size={11} />
+                      <span>{previews.revolutions ? 'hide preview' : 'preview'}</span>
+                    </button>
                   </span>
                   <span className="font-mono text-xs shrink-0" style={{ color: 'var(--site-text-dim)' }}>
                     Python | Mar 2025
@@ -587,21 +771,64 @@ export default function AboutClient({
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-xs md:text-sm" style={{ color: 'var(--site-text)' }}>
                   <li>Wrote software to visualize rotations of functions about linear axes, with Python, NumPy, and Matplotlib</li>
                 </ul>
+                <ProjectPreviewDrawer
+                  isOpen={!!previews.revolutions}
+                  imageSrc="/images/rotation.png"
+                  alt="Revolutions 3D Surface"
+                  caption="Revolutions — interactive 3D Matplotlib plot rotating mathematical curves about an axis."
+                />
               </div>
 
-              {/* Homelab */}
+              {/* Discord Remote Access (Mar 2024) */}
               <div>
                 <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
                   <span className="font-mono text-sm font-semibold" style={{ color: 'var(--site-text)' }}>
-                    Homelab
+                    <Link
+                      href="/projects/projects/security/discord-remote-access"
+                      className="hover:underline"
+                      style={{ color: 'var(--site-text)' }}
+                    >
+                      Discord Remote Access
+                    </Link>{' '}
+                    (
+                    <a
+                      href="https://github.com/voidReq/discordRemoteAccess"
+                      {...externalProps}
+                      className="hover:underline"
+                      style={{ color: 'var(--site-text-dim)' }}
+                    >
+                      github.com/voidReq/discordRemoteAccess ↗
+                    </a>
+                    ){' '}
+                    <button
+                      type="button"
+                      onClick={() => togglePreview('discord')}
+                      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-mono transition-colors border cursor-pointer align-baseline ml-1"
+                      style={{
+                        borderColor: previews.discord ? 'var(--site-cyan)' : 'var(--site-border)',
+                        color: previews.discord ? 'var(--site-cyan)' : 'var(--site-text-dim)',
+                        backgroundColor: previews.discord ? 'rgba(125, 207, 255, 0.08)' : 'transparent',
+                      }}
+                      title="Toggle decoy game preview"
+                    >
+                      <IconPhoto size={11} />
+                      <span>{previews.discord ? 'hide preview' : 'preview'}</span>
+                    </button>
                   </span>
                   <span className="font-mono text-xs shrink-0" style={{ color: 'var(--site-text-dim)' }}>
-                    Linux (Pi OS, Ubuntu), Networking | Jan 2025 – Present
+                    C, Windows API | Mar 2024
                   </span>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-xs md:text-sm" style={{ color: 'var(--site-text)' }}>
-                  <li>Assembled a Pi 5 and an old PC into a homelab, formed an encrypted Tailnet, and deployed various automation projects</li>
+                  <li>Proof-of-concept remote access tool in pure C utilizing the Discord Bot API as an encrypted covert C2 channel</li>
+                  <li>Disguised behind a native Win32 Rock-Paper-Scissors decoy game running in a parallel GUI thread to evade victim suspicion</li>
                 </ul>
+                <ProjectPreviewDrawer
+                  isOpen={!!previews.discord}
+                  imageSrc="/images/discord-rat-preview.png"
+                  alt="Discord Remote Access Decoy Game"
+                  caption="Decoy GUI — a native Win32 Rock-Paper-Scissors game that boots in the foreground while the Discord C2 channel runs in the background."
+                />
               </div>
             </div>
           </FoldableSection>
