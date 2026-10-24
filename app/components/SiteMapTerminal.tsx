@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState, useRef, useEffect, useCallback, KeyboardEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { SITE, NUAUTO_URL } from '@/lib/site';
+import { SITE, NUAUTO_URL, VIMOCS_URL } from '@/lib/site';
 
 interface TreeEntry {
   href: string;
@@ -31,6 +31,7 @@ const siteTree: TreeEntry[] = [
     href: '/about', name: 'about/', color: '#e0af68',
     children: [
       { href: NUAUTO_URL, name: 'nuauto', color: '#bb9af7' },
+      { href: VIMOCS_URL, name: 'vimocs', color: '#7dcfff' },
     ],
   } : {
     href: '/tools/encode', name: 'tools/', color: '#f7768e',

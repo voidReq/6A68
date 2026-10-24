@@ -38,3 +38,6 @@ export const SITE = clean
 
 /** NUauto's README, linked from the Tools menu and the sitemap. */
 export const NUAUTO_URL = 'https://github.com/voidReq/NUauto/blob/main/README.md';
+
+/** Vimocs repository URL. */
+export const VIMOCS_URL = 'https://github.com/voidReq/vimocs';
