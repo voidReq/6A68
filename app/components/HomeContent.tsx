@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { Switch, Rating, Text, Tooltip, Notification, Alert, Button, Modal } from '@mantine/core';
-import { IconArrowRight, IconInfoCircle, IconHeart, IconNotes, IconCode, IconMessageCircle, IconChevronRight, IconUser } from '@tabler/icons-react';
+import { IconArrowRight, IconInfoCircle, IconHeart, IconNotes, IconCode, IconMessageCircle, IconChevronRight, IconUser, IconWorld, IconExternalLink } from '@tabler/icons-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
@@ -179,6 +179,30 @@ export default function HomeContent({ siteNodes }: { siteNodes: SiteNode[] }) {
             <NavCard href="/about" accent="#e0af68" icon={<IconUser size={18} />} title="About" desc="Background & links" delay={0.2} className="col-span-2 md:col-span-1" />
           ) : (
             <NavCard href="/message-board" accent="#e0af68" icon={<IconMessageCircle size={18} />} title="Messages" desc="Leave your mark" delay={0.2} className="col-span-2 md:col-span-1" />
+          )}
+
+          {/* Goonsite only: points visitors at the new personal site */}
+          {!CLEAN && (
+            <motion.a
+              href="https://6a68.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="col-span-2 md:col-span-3 pointer-events-auto"
+              style={{ textDecoration: 'none' }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25, duration: 0.5, ease: 'easeOut' }}
+            >
+              <GlowCard color="#9ece6a">
+                <div className="flex items-center justify-between gap-3 px-4 py-3 font-mono text-sm">
+                  <span className="flex items-center gap-2" style={{ color: 'var(--site-text)' }}>
+                    <IconWorld size={16} style={{ color: '#9ece6a' }} />
+                    <span>New personal site: <span className="font-bold" style={{ color: '#9ece6a' }}>6A68.dev</span></span>
+                  </span>
+                  <IconExternalLink size={14} style={{ color: 'var(--site-text-dim)' }} />
+                </div>
+              </GlowCard>
+            </motion.a>
           )}
 
           {!CLEAN && <div className="col-span-2 md:col-span-3 flex justify-center pt-1 pointer-events-auto">
